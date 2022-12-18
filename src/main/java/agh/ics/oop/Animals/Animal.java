@@ -1,5 +1,6 @@
 package agh.ics.oop.Animals;
 
+import agh.ics.oop.Genes.Genotype;
 import agh.ics.oop.Utilities.Position;
 
 public class Animal
@@ -8,13 +9,17 @@ public class Animal
     private int energy;
     private final Genotype genotype;
     private final Behavior behavior;
+    private int birthDate;
+    private int childrenCount;
 
-    public Animal(Position position, int energy, Genotype genotype, Behavior behavior)
+    public Animal(Position position, int energy, Genotype genotype, Behavior behavior, int date)
     {
         this.position = position;
         this.energy = energy;
         this.genotype = genotype;
         this.behavior = behavior;
+        birthDate = date;
+        childrenCount = 0;
     }
 
     public Position getPosition() {
@@ -38,5 +43,13 @@ public class Animal
     public boolean isDead()
     {
         return energy <= 0;
+    }
+
+    public int getBirthDate() {
+        return birthDate;
+    }
+
+    public int getChildrenCount() {
+        return childrenCount;
     }
 }

@@ -8,7 +8,7 @@ public abstract class GenePointer {
     protected final int numberOfGenes;
     protected Random random = new Random();
 
-    public GenePointer(int numberOfGenes) {
+    protected GenePointer(int numberOfGenes) {
         this.numberOfGenes = numberOfGenes;
         pointer = random.nextInt(numberOfGenes);
     }

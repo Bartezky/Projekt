@@ -1,5 +1,6 @@
 package agh.ics.oop.Animals;
 
+import agh.ics.oop.Genes.*;
 import agh.ics.oop.Utilities.Position;
 import agh.ics.oop.Utilities.Vector2D;
 import agh.ics.oop.WorldMap;
@@ -19,8 +20,9 @@ public class AnimalsOnMapManager
     private final int genotypeLength;
     private final Behavior behavior;
     private final Comparator<Animal> comparator;
+    private final int genePointerType;
 
-    public AnimalsOnMapManager(WorldMap map, int initialAnimalCount, int initialAnimalEnergy, int minimumEnergyToReproduce, int energyUsedToReproduce, Mutation mutation, int genotypeLength, Behavior behavior)
+    public AnimalsOnMapManager(WorldMap map, int initialAnimalCount, int initialAnimalEnergy, int minimumEnergyToReproduce, int energyUsedToReproduce, Mutation mutation, int genotypeLength, Behavior behavior, int genePointerType)
     {
         this.map = map;
         this.initialAnimalCount = initialAnimalCount;
@@ -30,6 +32,7 @@ public class AnimalsOnMapManager
         this.mutation = mutation;
         this.genotypeLength = genotypeLength;
         this.behavior = behavior;
+        this.genePointerType = genePointerType;
         comparator = new AnimalComparator();
 
         animalsOnMap = new HashMap<>();
@@ -60,15 +63,17 @@ public class AnimalsOnMapManager
 
             int orientation = random.nextInt(8);
 
-            int[] genotype = new int[genotypeLength];
-
-            for (int j = 0; j < genotype.length; ++j)
-            {
-                genotype[i] = random.nextInt(8);
+            Genome genome = new Genome(genotypeLength);
+            GenePointer genePointer;
+            if (genePointerType == 0) {
+                genePointer = new BitMadness(genotypeLength);
+            }
+            else {
+                genePointer = new FullPredistination(genotypeLength);
             }
 
             Position position = new Position(new Vector2D(x, y), orientation);
-            Animal animal = new Animal(position, initialAnimalEnergy, new Genotype(genotype), behavior);
+            Animal animal = new Animal(position, initialAnimalEnergy, new Genotype(genePointer, genome), behavior, 0);
 
             placeAnimal(position, animal);
         }
