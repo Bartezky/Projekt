@@ -1,10 +1,12 @@
 package agh.ics.oop;
 
+import agh.ics.oop.Genes.Genotype;
+
 public class Animal implements IMapElement {
 
     private final AbstractWorldMap map;
     private Location location;
-    private Genome genome;
+    private Genotype genotype;
     private int energy;
     private int dayOfBirth;
     private int dayOfDeath;
@@ -13,10 +15,10 @@ public class Animal implements IMapElement {
     private int eatenPlants;
 
 
-    public Animal(AbstractWorldMap map, Location location, Genome genome, int dayOfBirth, int energy) {
+    public Animal(AbstractWorldMap map, Location location, Genotype genotype, int dayOfBirth, int energy) {
         this.map = map;
         this.location = location;
-        this.genome = genome;
+        this.genotype = genotype;
         this.dayOfBirth = dayOfBirth;
         this.energy = energy;
         this.numberOfChild = 0;
@@ -39,11 +41,11 @@ public class Animal implements IMapElement {
     }
 
     public void turn() {
-        location.turn(new Orientation(genome.getGene()));
+        location.turn(new Orientation(genotype.getGene()));
     }
 
     public void move() {
-        int energy = map.move(location);
+        int energy = map.move(this, location);
         this.energy -= energy;
     }
 
