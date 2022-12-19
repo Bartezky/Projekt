@@ -8,16 +8,14 @@ public class Animal
     private Position position;
     private int energy;
     private final Genotype genotype;
-    private final Behavior behavior;
     private int birthDate;
     private int childrenCount;
 
-    public Animal(Position position, int energy, Genotype genotype, Behavior behavior, int date)
+    public Animal(Position position, int energy, Genotype genotype, int date)
     {
         this.position = position;
         this.energy = energy;
         this.genotype = genotype;
-        this.behavior = behavior;
         birthDate = date;
         childrenCount = 0;
     }

@@ -1,11 +1,12 @@
 package agh.ics.oop.Genes;
 
 import agh.ics.oop.Genes.Mutation;
+import agh.ics.oop.Utilities.Configuration;
 
 public class RandomMutation extends Mutation {
 
-    protected RandomMutation(int numberOfGenes, int minimumNumberOfMutation, int maximumNumberOfMutation) {
-        super(numberOfGenes, minimumNumberOfMutation, maximumNumberOfMutation);
+    public RandomMutation(Configuration configuration) {
+        super(configuration);
     }
 
     @Override

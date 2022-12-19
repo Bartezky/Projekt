@@ -1,5 +1,6 @@
 package agh.ics.oop.Plants;
 
+import agh.ics.oop.Utilities.Configuration;
 import agh.ics.oop.Utilities.Vector2D;
 import agh.ics.oop.WorldMap;
 import java.util.HashSet;
@@ -11,9 +12,9 @@ public class WoodedEquator extends PlantsOnMapManager
     private final int upperPreferredRow;
     private final Set<Vector2D> preferredPositions;
 
-    public WoodedEquator(WorldMap map, int initialPlantCount, int singlePlantEnergy, int plantGrowthRate)
+    public WoodedEquator(WorldMap map, Configuration configuration)
     {
-        super(map, initialPlantCount, singlePlantEnergy, plantGrowthRate);
+        super(map, configuration);
 
         lowerPreferredRow = calculateLowerPreferredRow();
         upperPreferredRow = calculateUpperPreferredRow();

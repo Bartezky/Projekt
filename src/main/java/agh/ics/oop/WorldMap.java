@@ -1,8 +1,13 @@
 package agh.ics.oop;
 
 import agh.ics.oop.Animals.AnimalsOnMapManager;
+import agh.ics.oop.MapBorders.Globe;
+import agh.ics.oop.MapBorders.HellPortal;
 import agh.ics.oop.MapBorders.MapBordersManager;
 import agh.ics.oop.Plants.PlantsOnMapManager;
+import agh.ics.oop.Plants.ToxicBodies;
+import agh.ics.oop.Plants.WoodedEquator;
+import agh.ics.oop.Utilities.Configuration;
 
 public class WorldMap
 {
@@ -12,10 +17,26 @@ public class WorldMap
     private final MapBordersManager mapBordersManager;
     private final PlantsOnMapManager plantsOnMapManager;
 
-    public WorldMap(int width, int height)
+    public WorldMap(Configuration configuration)
     {
-        this.width = width;
-        this.height = height;
+        width = configuration.getMapWidth();
+        height = configuration.getMapHeight();
+
+        switch (configuration.getMapVariant())
+        {
+            case 0 -> mapBordersManager = new Globe(this);
+            case 1 -> mapBordersManager = new HellPortal(this);
+            default -> throw new IllegalArgumentException("Illegal map variant");
+        }
+
+        switch (configuration.getPlantGrowthVariant())
+        {
+            case 0 -> plantsOnMapManager = new WoodedEquator(this, configuration);
+            case 1 -> plantsOnMapManager = new ToxicBodies(this, configuration);
+            default -> throw new IllegalArgumentException("Illegal plant growth variant");
+        }
+
+        animalsOnMapManager = new AnimalsOnMapManager(this, configuration);
     }
 
     public int getWidth()

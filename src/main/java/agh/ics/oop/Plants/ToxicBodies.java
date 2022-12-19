@@ -2,15 +2,16 @@ package agh.ics.oop.Plants;
 
 import agh.ics.oop.*;
 import agh.ics.oop.Animals.Animal;
+import agh.ics.oop.Utilities.Configuration;
 import agh.ics.oop.Utilities.Vector2D;
 
 import java.util.*;
 
 public class ToxicBodies extends PlantsOnMapManager
 {
-    public ToxicBodies(WorldMap map, int initialPlantCount, int singlePlantEnergy, int plantGrowthRate)
+    public ToxicBodies(WorldMap map, Configuration configuration)
     {
-        super(map, initialPlantCount, singlePlantEnergy, plantGrowthRate);
+        super(map, configuration);
     }
 
     @Override

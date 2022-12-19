@@ -1,5 +1,6 @@
 package agh.ics.oop.Plants;
 
+import agh.ics.oop.Utilities.Configuration;
 import agh.ics.oop.Utilities.Vector2D;
 import agh.ics.oop.WorldMap;
 
@@ -16,12 +17,12 @@ public abstract class PlantsOnMapManager
     protected final Set<Vector2D> allPositions;
     protected final Random random;
 
-    public PlantsOnMapManager(WorldMap map, int initialPlantCount, int singlePlantEnergy, int plantGrowthRate)
+    public PlantsOnMapManager(WorldMap map, Configuration configuration)
     {
         this.map = map;
-        this.initialPlantCount = initialPlantCount;
-        this.singlePlantEnergy = singlePlantEnergy;
-        this.plantGrowthRate = plantGrowthRate;
+        this.initialPlantCount = configuration.getInitialPlantsCount();
+        this.singlePlantEnergy = configuration.getSinglePlantEnergy();
+        this.plantGrowthRate = configuration.getPlantGrowthRate();
 
         this.allPositions = new HashSet<>();
         this.random = new Random();

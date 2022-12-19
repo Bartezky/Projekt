@@ -1,11 +1,12 @@
 package agh.ics.oop.Genes;
 
 import agh.ics.oop.Genes.Mutation;
+import agh.ics.oop.Utilities.Configuration;
 
 public class SlightMutation extends Mutation {
 
-    protected SlightMutation(int numberOfGenes, int minimumNumberOfMutation, int maximumNumberOfMutation) {
-        super(numberOfGenes, minimumNumberOfMutation, maximumNumberOfMutation);
+    public SlightMutation(Configuration configuration) {
+        super(configuration);
     }
 
     @Override

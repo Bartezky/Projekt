@@ -1,6 +1,7 @@
 package agh.ics.oop.Genes;
 
 import agh.ics.oop.Genes.Genome;
+import agh.ics.oop.Utilities.Configuration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,11 +16,11 @@ public abstract class Mutation {
     protected Random random = new Random();
 
 
-    protected Mutation(int numberOfGenes, int minimumNumberOfMutation, int maximumNumberOfMutation) {
-        this.minimumNumberOfMutation = minimumNumberOfMutation;
-        this.maximumNumberOfMutation = maximumNumberOfMutation;
+    protected Mutation(Configuration configuration) {
+        this.minimumNumberOfMutation = configuration.getMinimumNumberOfMutations();
+        this.maximumNumberOfMutation = configuration.getMaximumNumberOfMutations();
         this.randomIndexes = new ArrayList<>();
-        for (int i = 0; i < numberOfGenes; i++) {
+        for (int i = 0; i < configuration.getAnimalGenomeLength(); i++) {
             randomIndexes.add(i);
         }
     }

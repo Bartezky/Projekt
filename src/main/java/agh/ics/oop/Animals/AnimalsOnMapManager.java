@@ -1,6 +1,7 @@
 package agh.ics.oop.Animals;
 
 import agh.ics.oop.Genes.*;
+import agh.ics.oop.Utilities.Configuration;
 import agh.ics.oop.Utilities.Position;
 import agh.ics.oop.Utilities.Vector2D;
 import agh.ics.oop.WorldMap;
@@ -18,23 +19,34 @@ public class AnimalsOnMapManager
     private final int energyUsedToReproduce;
     private final Mutation mutation;
     private final int genotypeLength;
-    private final Behavior behavior;
     private final Comparator<Animal> comparator;
     private final int genePointerType;
 
-    public AnimalsOnMapManager(WorldMap map, int initialAnimalCount, int initialAnimalEnergy, int minimumEnergyToReproduce, int energyUsedToReproduce, Mutation mutation, int genotypeLength, Behavior behavior, int genePointerType)
+    public AnimalsOnMapManager(WorldMap map, Configuration configuration)
     {
         this.map = map;
-        this.initialAnimalCount = initialAnimalCount;
-        this.initialAnimalEnergy = initialAnimalEnergy;
-        this.minimumEnergyToReproduce = minimumEnergyToReproduce;
-        this.energyUsedToReproduce = energyUsedToReproduce;
-        this.mutation = mutation;
-        this.genotypeLength = genotypeLength;
-        this.behavior = behavior;
-        this.genePointerType = genePointerType;
-        comparator = new AnimalComparator();
+        this.initialAnimalCount = configuration.getInitialAnimalsCount();
+        this.initialAnimalEnergy = configuration.getInitialAnimalEnergy();
+        this.minimumEnergyToReproduce = configuration.getRequiredAnimalEnergyToReproduce();
+        this.energyUsedToReproduce = configuration.getAnimalEnergyUsedToReproduce();
+        this.genotypeLength = configuration.getAnimalGenomeLength();
 
+
+        switch (configuration.getMutationVariant())
+        {
+            case 0 -> mutation = new SlightMutation(configuration);
+            case 1 -> mutation = new RandomMutation(configuration);
+            default -> throw new IllegalArgumentException("Illegal mutation variant");
+        }
+
+        switch (configuration.getAnimalBehaviorVariant())
+        {
+            case 0 -> genePointerType = 0;
+            case 1 -> genePointerType = 1;
+            default -> throw new IllegalArgumentException("Illegal behavior variant");
+        }
+
+        comparator = new AnimalComparator();
         animalsOnMap = new HashMap<>();
         deadAnimalsOnMap = new HashMap<>();
 
@@ -73,7 +85,7 @@ public class AnimalsOnMapManager
             }
 
             Position position = new Position(new Vector2D(x, y), orientation);
-            Animal animal = new Animal(position, initialAnimalEnergy, new Genotype(genePointer, genome), behavior, 0);
+            Animal animal = new Animal(position, initialAnimalEnergy, new Genotype(genePointer, genome), 0);
 
             placeAnimal(position, animal);
         }
@@ -165,10 +177,6 @@ public class AnimalsOnMapManager
 
     public int getGenotypeLength() {
         return genotypeLength;
-    }
-
-    public Behavior getBehavior() {
-        return behavior;
     }
 
     public Map<Vector2D, Set<Animal>> getDeadAnimalsOnMap()
