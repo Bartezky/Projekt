@@ -27,6 +27,8 @@ public abstract class PlantsOnMapManager
         this.allPositions = new HashSet<>();
         this.random = new Random();
         this.plantsOnMap = new HashMap<>();
+
+        initializeAllPositions();
     }
 
     public abstract void addNewPlants(int count);
@@ -44,8 +46,13 @@ public abstract class PlantsOnMapManager
 
     protected Vector2D randomPosition(Set<Vector2D> positions)
     {
-        Vector2D[] pos = (Vector2D[]) positions.toArray();
+        Vector2D[] pos = positions.toArray(new Vector2D[positions.size()]);
         return pos[random.nextInt(pos.length)];
+    }
+
+    public boolean isFull()
+    {
+        return allPositions.size() == plantsOnMap.size();
     }
 
     public Map<Vector2D, Plant> getPlantsOnMap()

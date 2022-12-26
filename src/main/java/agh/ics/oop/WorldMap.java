@@ -13,6 +13,7 @@ public class WorldMap
 {
     private final int width;
     private final int height;
+    private int currentDay;
     private final AnimalsOnMapManager animalsOnMapManager;
     private final MapBordersManager mapBordersManager;
     private final PlantsOnMapManager plantsOnMapManager;
@@ -21,6 +22,7 @@ public class WorldMap
     {
         width = configuration.getMapWidth();
         height = configuration.getMapHeight();
+        currentDay = 0;
 
         switch (configuration.getMapVariant())
         {
@@ -62,5 +64,24 @@ public class WorldMap
     public PlantsOnMapManager getPlantsOnMapManager()
     {
         return plantsOnMapManager;
+    }
+
+    public int getCurrentDay()
+    {
+        return this.currentDay;
+    }
+
+    public void nextDay()
+    {
+        animalsOnMapManager.deleteDeadAnimalsFromMap();
+        animalsOnMapManager.moveAnimals();
+        animalsOnMapManager.eatPlants();
+        animalsOnMapManager.reproduceAnimals();
+        plantsOnMapManager.addNewPlants(plantsOnMapManager.getPlantGrowthRate());
+    }
+
+    public boolean isDead()
+    {
+        return animalsOnMapManager.isEmpty() && plantsOnMapManager.isFull();
     }
 }

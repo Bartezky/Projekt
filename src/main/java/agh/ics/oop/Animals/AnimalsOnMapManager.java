@@ -93,7 +93,7 @@ public class AnimalsOnMapManager
 
     private Animal[] sortAnimals(Set<Animal> animals)
     {
-        Animal[] animalsArray = (Animal[]) animals.toArray();
+        Animal[] animalsArray = animals.toArray(new Animal[animals.size()]);
         Arrays.sort(animalsArray, comparator);
 
         return animalsArray;
@@ -108,7 +108,7 @@ public class AnimalsOnMapManager
         {
             Set<Animal> animals = animalsOnMap.get(vector2D);
 
-            if (animals.size() > 0)
+            if (animals != null && animals.size() > 0)
             {
                 Animal[] animalsArray = sortAnimals(animals);
                 Animal strongestAnimal = animalsArray[animalsArray.length - 1];
@@ -182,5 +182,37 @@ public class AnimalsOnMapManager
     public Map<Vector2D, Set<Animal>> getDeadAnimalsOnMap()
     {
         return deadAnimalsOnMap;
+    }
+
+    public void moveAnimals()
+    {
+        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet())
+        {
+            Set<Animal> animalSet = entry.getValue();
+
+            for (Animal animal : animalSet)
+            {
+                animal.move();
+            }
+        }
+    }
+
+    public void reproduceAnimals()
+    {
+        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet())
+        {
+            Set<Animal> animalSet = entry.getValue();
+
+            if (animalSet.size() >= 2)
+            {
+                Animal[] animals = sortAnimals(animalSet);
+                animals[animals.length - 1].reproduce(animals[animals.length - 2]);
+            }
+        }
+    }
+
+    public boolean isEmpty()
+    {
+        return animalsOnMap.size() == 0;
     }
 }

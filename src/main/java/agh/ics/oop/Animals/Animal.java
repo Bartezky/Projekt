@@ -20,6 +20,18 @@ public class Animal
         childrenCount = 0;
     }
 
+    public void reproduce(Animal animal)
+    {
+        //Implementation
+        //Current animal reproduce with the animal given as parameter
+    }
+
+    public void move()
+    {
+        //Implementation
+        //The animal performs its next move. Moving reduces its energy
+    }
+
     public Position getPosition() {
         return position;
     }
