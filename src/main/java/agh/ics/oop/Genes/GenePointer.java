@@ -4,8 +4,8 @@ import java.util.Random;
 
 public abstract class GenePointer {
 
-    protected int pointer;
     protected final int numberOfGenes;
+    protected int pointer;
     protected Random random = new Random();
 
     protected GenePointer(int numberOfGenes) {

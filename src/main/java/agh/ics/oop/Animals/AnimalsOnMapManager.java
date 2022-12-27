@@ -8,8 +8,7 @@ import agh.ics.oop.WorldMap;
 
 import java.util.*;
 
-public class AnimalsOnMapManager
-{
+public class AnimalsOnMapManager {
     private final WorldMap map;
     private final Map<Vector2D, Set<Animal>> animalsOnMap;
     private final Map<Vector2D, Set<Animal>> deadAnimalsOnMap;
@@ -22,8 +21,7 @@ public class AnimalsOnMapManager
     private final Comparator<Animal> comparator;
     private final int genePointerType;
 
-    public AnimalsOnMapManager(WorldMap map, Configuration configuration)
-    {
+    public AnimalsOnMapManager(WorldMap map, Configuration configuration) {
         this.map = map;
         this.initialAnimalCount = configuration.getInitialAnimalsCount();
         this.initialAnimalEnergy = configuration.getInitialAnimalEnergy();
@@ -32,15 +30,13 @@ public class AnimalsOnMapManager
         this.genotypeLength = configuration.getAnimalGenomeLength();
 
 
-        switch (configuration.getMutationVariant())
-        {
+        switch (configuration.getMutationVariant()) {
             case 0 -> mutation = new SlightMutation(configuration);
             case 1 -> mutation = new RandomMutation(configuration);
             default -> throw new IllegalArgumentException("Illegal mutation variant");
         }
 
-        switch (configuration.getAnimalBehaviorVariant())
-        {
+        switch (configuration.getAnimalBehaviorVariant()) {
             case 0 -> genePointerType = 0;
             case 1 -> genePointerType = 1;
             default -> throw new IllegalArgumentException("Illegal behavior variant");
@@ -52,24 +48,21 @@ public class AnimalsOnMapManager
 
         addInitialAnimals();
     }
-    private void placeAnimal(Position position, Animal animal)
-    {
+
+    public void placeAnimal(Position position, Animal animal) {
         Vector2D vector2D = position.getVector2D();
 
-        if (!animalsOnMap.containsKey(vector2D))
-        {
+        if (!animalsOnMap.containsKey(vector2D)) {
             animalsOnMap.put(vector2D, new HashSet<>());
         }
 
         animalsOnMap.get(vector2D).add(animal);
     }
 
-    private void addInitialAnimals()
-    {
+    private void addInitialAnimals() {
         Random random = new Random();
 
-        for (int i = 0; i < initialAnimalCount; ++i)
-        {
+        for (int i = 0; i < initialAnimalCount; ++i) {
             int x = random.nextInt(map.getWidth());
             int y = random.nextInt(map.getHeight());
 
@@ -79,37 +72,32 @@ public class AnimalsOnMapManager
             GenePointer genePointer;
             if (genePointerType == 0) {
                 genePointer = new BitMadness(genotypeLength);
-            }
-            else {
+            } else {
                 genePointer = new FullPredistination(genotypeLength);
             }
 
             Position position = new Position(new Vector2D(x, y), orientation);
-            Animal animal = new Animal(position, initialAnimalEnergy, new Genotype(genePointer, genome), 0);
+            Animal animal = new Animal(position, initialAnimalEnergy, new Genotype(genePointer, genome), 0, map);
 
             placeAnimal(position, animal);
         }
     }
 
-    private Animal[] sortAnimals(Set<Animal> animals)
-    {
+    private Animal[] sortAnimals(Set<Animal> animals) {
         Animal[] animalsArray = animals.toArray(new Animal[animals.size()]);
         Arrays.sort(animalsArray, comparator);
 
         return animalsArray;
     }
 
-    public void eatPlants()
-    {
+    public void eatPlants() {
         Set<Vector2D> plantsPositions = map.getPlantsOnMapManager().getPlantsOnMap().keySet();
         Set<Vector2D> eatenPlants = new HashSet<>();
 
-        for (Vector2D vector2D : plantsPositions)
-        {
+        for (Vector2D vector2D : plantsPositions) {
             Set<Animal> animals = animalsOnMap.get(vector2D);
 
-            if (animals != null && animals.size() > 0)
-            {
+            if (animals != null && animals.size() > 0) {
                 Animal[] animalsArray = sortAnimals(animals);
                 Animal strongestAnimal = animalsArray[animalsArray.length - 1];
                 strongestAnimal.changeEnergy(map.getPlantsOnMapManager().getSinglePlantEnergy());
@@ -117,33 +105,26 @@ public class AnimalsOnMapManager
             }
         }
 
-        for (Vector2D vector2D : eatenPlants)
-        {
+        for (Vector2D vector2D : eatenPlants) {
             map.getPlantsOnMapManager().deletePlant(vector2D);
         }
     }
 
-    public void deleteDeadAnimalsFromMap()
-    {
-        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet())
-        {
+    public void deleteDeadAnimalsFromMap() {
+        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet()) {
             Vector2D vector2D = entry.getKey();
             Set<Animal> animalSet = entry.getValue();
 
-            for (Animal animal : animalSet)
-            {
-                if (animal.isDead())
-                {
-                    if (!deadAnimalsOnMap.containsKey(vector2D))
-                    {
+            for (Animal animal : animalSet) {
+                if (animal.isDead()) {
+                    if (!deadAnimalsOnMap.containsKey(vector2D)) {
                         deadAnimalsOnMap.put(vector2D, new HashSet<>());
                         deadAnimalsOnMap.get(vector2D).add(animal);
                     }
 
                     animalsOnMap.get(vector2D).remove(animal);
 
-                    if (animalsOnMap.get(vector2D).size() == 0)
-                    {
+                    if (animalsOnMap.get(vector2D).size() == 0) {
                         animalsOnMap.remove(vector2D);
                     }
                 }
@@ -179,40 +160,32 @@ public class AnimalsOnMapManager
         return genotypeLength;
     }
 
-    public Map<Vector2D, Set<Animal>> getDeadAnimalsOnMap()
-    {
+    public Map<Vector2D, Set<Animal>> getDeadAnimalsOnMap() {
         return deadAnimalsOnMap;
     }
 
-    public void moveAnimals()
-    {
-        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet())
-        {
+    public void moveAnimals() {
+        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet()) {
             Set<Animal> animalSet = entry.getValue();
 
-            for (Animal animal : animalSet)
-            {
+            for (Animal animal : animalSet) {
                 animal.move();
             }
         }
     }
 
-    public void reproduceAnimals()
-    {
-        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet())
-        {
+    public void reproduceAnimals() {
+        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet()) {
             Set<Animal> animalSet = entry.getValue();
 
-            if (animalSet.size() >= 2)
-            {
+            if (animalSet.size() >= 2) {
                 Animal[] animals = sortAnimals(animalSet);
-                animals[animals.length - 1].reproduce(animals[animals.length - 2]);
+                animals[animals.length - 1].reproduce(animals[animals.length - 2], mutation);
             }
         }
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return animalsOnMap.size() == 0;
     }
 }

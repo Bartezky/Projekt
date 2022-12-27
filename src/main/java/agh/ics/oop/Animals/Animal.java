@@ -1,35 +1,64 @@
 package agh.ics.oop.Animals;
 
-import agh.ics.oop.Genes.Genotype;
+import agh.ics.oop.Genes.*;
+import agh.ics.oop.Utilities.Orientation;
 import agh.ics.oop.Utilities.Position;
+import agh.ics.oop.WorldMap;
 
-public class Animal
-{
+import java.util.Random;
+
+public class Animal {
+    private final Genotype genotype;
+    private final WorldMap worldMap;
+    private final int birthDate;
     private Position position;
     private int energy;
-    private final Genotype genotype;
-    private int birthDate;
     private int childrenCount;
 
-    public Animal(Position position, int energy, Genotype genotype, int date)
-    {
+    public Animal(Position position, int energy, Genotype genotype, int date, WorldMap worldMap) {
         this.position = position;
         this.energy = energy;
         this.genotype = genotype;
         birthDate = date;
         childrenCount = 0;
+        this.worldMap = worldMap;
     }
 
-    public void reproduce(Animal animal)
-    {
-        //Implementation
-        //Current animal reproduce with the animal given as parameter
+    public void reproduce(Animal animal, Mutation mutation) {
+        int numberOfGenesFromStronger = worldMap.getConfiguration().getAnimalGenomeLength() * this.energy / (this.energy + animal.energy);
+        int numberOfGenesFromWeaker = worldMap.getConfiguration().getAnimalGenomeLength() - numberOfGenesFromStronger;
+
+        Random random = new Random();
+        Genome genome;
+        if (random.nextBoolean()) {
+            genome = new Genome(this.genotype.getGenome().getLeftSlice(numberOfGenesFromStronger), animal.genotype.getGenome().getRightSlice(numberOfGenesFromWeaker));
+        } else {
+            genome = new Genome(this.genotype.getGenome().getLeftSlice(numberOfGenesFromWeaker), animal.genotype.getGenome().getRightSlice(numberOfGenesFromStronger));
+        }
+
+        int genePointerType = worldMap.getConfiguration().getAnimalBehaviorVariant();
+        GenePointer genePointer;
+        if (genePointerType == 0) {
+            genePointer = new BitMadness(worldMap.getConfiguration().getAnimalGenomeLength());
+        } else {
+            genePointer = new FullPredistination(worldMap.getConfiguration().getAnimalGenomeLength());
+        }
+
+        Genotype newGenotype = new Genotype(genePointer, mutation.mutate(genome));
+
+        this.changeEnergy(-worldMap.getConfiguration().getAnimalEnergyUsedToReproduce());
+        animal.changeEnergy(-worldMap.getConfiguration().getAnimalEnergyUsedToReproduce());
+
+        this.childrenCount += 1;
+        animal.childrenCount += 1;
+
+        Animal newborn = new Animal(new Position(position.getVector2D(), new Orientation()), 2 * worldMap.getConfiguration().getAnimalEnergyUsedToReproduce(), newGenotype, worldMap.getCurrentDay(), worldMap);
+        worldMap.getAnimalsOnMapManager().placeAnimal(position, newborn);
     }
 
-    public void move()
-    {
-        //Implementation
-        //The animal performs its next move. Moving reduces its energy
+    public void move() {
+        position = position.turn(genotype.getGene());
+        worldMap.getMapBordersManager().moveAnimal(position.forwardPosition(), this);
     }
 
     public Position getPosition() {
@@ -40,18 +69,15 @@ public class Animal
         this.position = position;
     }
 
-    public void changeEnergy(int value)
-    {
+    public void changeEnergy(int value) {
         this.energy += value;
     }
 
-    public int getEnergy()
-    {
+    public int getEnergy() {
         return energy;
     }
 
-    public boolean isDead()
-    {
+    public boolean isDead() {
         return energy <= 0;
     }
 

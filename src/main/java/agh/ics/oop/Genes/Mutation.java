@@ -1,6 +1,5 @@
 package agh.ics.oop.Genes;
 
-import agh.ics.oop.Genes.Genome;
 import agh.ics.oop.Utilities.Configuration;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public abstract class Mutation {
     public Genome mutate(Genome genome) {
         int numberOfMutation = random.nextInt(maximumNumberOfMutation - minimumNumberOfMutation) - minimumNumberOfMutation;
         Collections.shuffle(randomIndexes);
-        int [] newGenes = genome.getGenes();
+        int[] newGenes = genome.getGenes();
         for (int i = 0; i < numberOfMutation; i++) {
             newGenes[randomIndexes.get(i)] = mutateGene(newGenes[randomIndexes.get(i)]);
         }

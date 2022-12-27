@@ -1,6 +1,5 @@
 package agh.ics.oop.Genes;
 
-import agh.ics.oop.Genes.Mutation;
 import agh.ics.oop.Utilities.Configuration;
 
 public class RandomMutation extends Mutation {
