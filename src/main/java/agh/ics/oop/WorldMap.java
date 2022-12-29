@@ -23,6 +23,7 @@ public class WorldMap {
         width = configuration.getMapWidth();
         height = configuration.getMapHeight();
         currentDay = 0;
+        animalsOnMapManager = new AnimalsOnMapManager(this, configuration);
 
         switch (configuration.getMapVariant()) {
             case 0 -> mapBordersManager = new Globe(this);
@@ -35,8 +36,6 @@ public class WorldMap {
             case 1 -> plantsOnMapManager = new ToxicBodies(this, configuration);
             default -> throw new IllegalArgumentException("Illegal plant growth variant");
         }
-
-        animalsOnMapManager = new AnimalsOnMapManager(this, configuration);
     }
 
     public int getWidth() {

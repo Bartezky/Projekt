@@ -19,7 +19,7 @@ public class Orientation {
     }
 
     public Orientation add(int ratio) {
-        return new Orientation((orientation + ratio) % 8);
+        return new Orientation((8 + orientation + ratio) % 8);
     }
 
     public Vector2D toVector() {

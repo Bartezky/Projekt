@@ -20,7 +20,9 @@ public class WoodedEquator extends PlantsOnMapManager
         upperPreferredRow = calculateUpperPreferredRow();
         preferredPositions = new HashSet<>();
 
-        initialisePreferredPositions();
+        initializePreferredPositions();
+
+        addNewPlants(super.getInitialPlantCount());
     }
 
     @Override
@@ -87,7 +89,7 @@ public class WoodedEquator extends PlantsOnMapManager
         return lowerPreferredRow + numberOfPreferredRows;
     }
 
-    private void initialisePreferredPositions()
+    private void initializePreferredPositions()
     {
         for (int i = 0; i < map.getWidth(); ++i)
         {

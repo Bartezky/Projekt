@@ -30,7 +30,7 @@ public class Globe extends MapBordersManager
 
         if (vector2D.getY() >= mapHeight || vector2D.getY() < 0)
         {
-            newPosition = new Position(animal.getPosition().getVector2D(), orientation.opposite());
+            newPosition = new Position(oldVector2D, orientation.opposite());
             animal.setPosition(newPosition);
         }
         else
@@ -40,8 +40,6 @@ public class Globe extends MapBordersManager
             animal.setPosition(newPosition);
         }
 
-        Map<Vector2D, Set<Animal>> animalsOnMap = map.getAnimalsOnMapManager().getAnimalsOnMap();
-
-        placeAnimal(animalsOnMap, oldVector2D, vector2D, animal);
+        placeAnimal(oldVector2D, newPosition.getVector2D(), animal);
     }
 }

@@ -20,6 +20,9 @@ public class Configuration
     private int mutationVariant;
     private int animalGenomeLength;
     private int animalBehaviorVariant;
+    private int refreshRate;
+    private int windowWidth;
+    private int windowHeight;
     private final String configFilePath;
 
 
@@ -45,9 +48,11 @@ public class Configuration
 
     private void validateInput()
     {
-        if (mapWidth < 1 || mapHeight < 1 || initialPlantsCount < 0 || singlePlantEnergy < 1 || plantGrowthRate < 0 ||
-            initialAnimalsCount < 1 || initialAnimalEnergy < 0 || requiredAnimalEnergyToReproduce < animalEnergyUsedToReproduce ||
-            animalEnergyUsedToReproduce < 1 || minimumNumberOfMutations < 0 || minimumNumberOfMutations > maximumNumberOfMutations || animalGenomeLength < 1)
+        if (mapWidth < 1 || mapHeight < 1 || initialPlantsCount < 0 || initialAnimalsCount > (mapWidth * mapHeight) ||
+                singlePlantEnergy < 1 || plantGrowthRate < 0 || initialAnimalsCount < 1 || initialAnimalEnergy < 0 ||
+                requiredAnimalEnergyToReproduce < animalEnergyUsedToReproduce || animalEnergyUsedToReproduce < 1 ||
+                minimumNumberOfMutations < 0 || minimumNumberOfMutations > maximumNumberOfMutations ||
+                animalGenomeLength < 1 || refreshRate < 1 || windowWidth < 1 || windowHeight < 1)
         {
             throw new IllegalArgumentException("Wrong values of simulation");
         }
@@ -93,6 +98,9 @@ public class Configuration
                         case "mutationVariant" -> mutationVariant = value;
                         case "animalGenomeLength" -> animalGenomeLength = value;
                         case "animalBehaviorVariant" -> animalBehaviorVariant = value;
+                        case "refreshRate" -> refreshRate = value;
+                        case "windowWidth" -> windowWidth = value;
+                        case "windowHeight" -> windowHeight = value;
                         default -> throw new IllegalArgumentException("Cannot resolve variable: " + key);
                     }
                 }
@@ -166,6 +174,18 @@ public class Configuration
 
     public int getAnimalBehaviorVariant() {
         return animalBehaviorVariant;
+    }
+
+    public int getRefreshRate() {
+        return refreshRate;
+    }
+
+    public int getWindowWidth() {
+        return windowWidth;
+    }
+
+    public int getWindowHeight() {
+        return windowHeight;
     }
 
     public String getConfigFilePath() {

@@ -35,4 +35,9 @@ public class Vector2D {
     public Vector2D add(Vector2D other) {
         return new Vector2D(x + other.x, y + other.y);
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
 }

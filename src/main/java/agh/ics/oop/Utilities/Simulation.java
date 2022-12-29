@@ -12,7 +12,7 @@ public class Simulation implements Runnable
     {
         this.configuration = configuration;
         this.map = new WorldMap(configuration);
-        moveDelay = 1000;
+        moveDelay = configuration.getRefreshRate();
     }
 
     @Override
@@ -30,8 +30,13 @@ public class Simulation implements Runnable
                 System.exit(2);
             }
 
-            map.nextDay();
+            performNextDay();
         }
+    }
+
+    protected void performNextDay()
+    {
+        map.nextDay();
     }
 
     public WorldMap getMap()

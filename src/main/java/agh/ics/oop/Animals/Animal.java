@@ -25,6 +25,11 @@ public class Animal {
     }
 
     public void reproduce(Animal animal, Mutation mutation) {
+        if (this.isDead() || animal.isDead())
+        {
+            return;
+        }
+
         int numberOfGenesFromStronger = worldMap.getConfiguration().getAnimalGenomeLength() * this.energy / (this.energy + animal.energy);
         int numberOfGenesFromWeaker = worldMap.getConfiguration().getAnimalGenomeLength() - numberOfGenesFromStronger;
 
@@ -59,6 +64,7 @@ public class Animal {
     public void move() {
         position = position.turn(genotype.getGene());
         worldMap.getMapBordersManager().moveAnimal(position.forwardPosition(), this);
+        changeEnergy(-1);
     }
 
     public Position getPosition() {

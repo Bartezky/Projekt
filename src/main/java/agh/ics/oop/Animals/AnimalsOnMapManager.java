@@ -28,6 +28,9 @@ public class AnimalsOnMapManager {
         this.minimumEnergyToReproduce = configuration.getRequiredAnimalEnergyToReproduce();
         this.energyUsedToReproduce = configuration.getAnimalEnergyUsedToReproduce();
         this.genotypeLength = configuration.getAnimalGenomeLength();
+        comparator = new AnimalComparator();
+        animalsOnMap = new HashMap<>();
+        deadAnimalsOnMap = new HashMap<>();
 
 
         switch (configuration.getMutationVariant()) {
@@ -41,10 +44,6 @@ public class AnimalsOnMapManager {
             case 1 -> genePointerType = 1;
             default -> throw new IllegalArgumentException("Illegal behavior variant");
         }
-
-        comparator = new AnimalComparator();
-        animalsOnMap = new HashMap<>();
-        deadAnimalsOnMap = new HashMap<>();
 
         addInitialAnimals();
     }
@@ -111,23 +110,36 @@ public class AnimalsOnMapManager {
     }
 
     public void deleteDeadAnimalsFromMap() {
+        Map<Vector2D, Set<Animal>> animalsToDelete = new HashMap<>();
+
         for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet()) {
             Vector2D vector2D = entry.getKey();
             Set<Animal> animalSet = entry.getValue();
 
             for (Animal animal : animalSet) {
                 if (animal.isDead()) {
-                    if (!deadAnimalsOnMap.containsKey(vector2D)) {
-                        deadAnimalsOnMap.put(vector2D, new HashSet<>());
-                        deadAnimalsOnMap.get(vector2D).add(animal);
+                    if (!animalsToDelete.containsKey(vector2D))
+                    {
+                        animalsToDelete.put(vector2D, new HashSet<>());
                     }
 
-                    animalsOnMap.get(vector2D).remove(animal);
-
-                    if (animalsOnMap.get(vector2D).size() == 0) {
-                        animalsOnMap.remove(vector2D);
-                    }
+                    animalsToDelete.get(vector2D).add(animal);
                 }
+            }
+        }
+
+        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsToDelete.entrySet()) {
+            Vector2D vector2D = entry.getKey();
+            Set<Animal> animalSet = entry.getValue();
+
+            for (Animal animal : animalSet)
+            {
+                animalsOnMap.get(vector2D).remove(animal);
+            }
+
+            if (animalsOnMap.get(vector2D).size() == 0)
+            {
+                animalsOnMap.remove(vector2D);
             }
         }
     }
@@ -165,13 +177,17 @@ public class AnimalsOnMapManager {
     }
 
     public void moveAnimals() {
-        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet()) {
-            Set<Animal> animalSet = entry.getValue();
+        Set<Animal> allAnimals = new HashSet<>();
 
-            for (Animal animal : animalSet) {
-                animal.move();
-            }
+        for (Map.Entry<Vector2D, Set<Animal>> entry : animalsOnMap.entrySet()) {
+            allAnimals.addAll(entry.getValue());
         }
+
+        for (Animal animal : allAnimals)
+        {
+            animal.move();
+        }
+
     }
 
     public void reproduceAnimals() {

@@ -12,6 +12,8 @@ public class ToxicBodies extends PlantsOnMapManager
     public ToxicBodies(WorldMap map, Configuration configuration)
     {
         super(map, configuration);
+
+        addNewPlants(super.getInitialPlantCount());
     }
 
     @Override
@@ -67,6 +69,19 @@ public class ToxicBodies extends PlantsOnMapManager
             }
 
             resultMap.get(value).add(vector2D);
+        }
+
+        Set<Vector2D> fieldsWithoutDeaths = new HashSet<>(allPositions);
+        fieldsWithoutDeaths.removeAll(deadAnimals.keySet());
+
+        for (Vector2D vector2D : fieldsWithoutDeaths)
+        {
+            if (!resultMap.containsKey(0))
+            {
+                resultMap.put(0, new HashSet<>());
+            }
+
+            resultMap.get(0).add(vector2D);
         }
 
         return resultMap;

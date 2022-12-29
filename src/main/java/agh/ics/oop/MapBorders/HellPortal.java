@@ -39,14 +39,12 @@ public class HellPortal extends MapBordersManager
 
             animal.setPosition(newPosition);
             animal.changeEnergy(-map.getAnimalsOnMapManager().getEnergyUsedToReproduce());
-
         }
         else
         {
             animal.setPosition(wantedPosition);
         }
 
-        Map<Vector2D, Set<Animal>> animalsOnMap = map.getAnimalsOnMapManager().getAnimalsOnMap();
-        placeAnimal(animalsOnMap, oldVector2D, vector2D, animal);
+        placeAnimal(oldVector2D, vector2D, animal);
     }
 }

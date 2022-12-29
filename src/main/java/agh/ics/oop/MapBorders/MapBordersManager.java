@@ -18,7 +18,9 @@ public abstract class MapBordersManager {
 
     public abstract void moveAnimal(Position wantedPosition, Animal animal);
 
-    protected void placeAnimal(Map<Vector2D, Set<Animal>> animalsOnMap, Vector2D oldVector2D, Vector2D newVector2D, Animal animal) {
+    protected void placeAnimal(Vector2D oldVector2D, Vector2D newVector2D, Animal animal) {
+        Map<Vector2D, Set<Animal>> animalsOnMap = map.getAnimalsOnMapManager().getAnimalsOnMap();
+
         animalsOnMap.get(oldVector2D).remove(animal);
 
         if (animalsOnMap.get(oldVector2D).size() == 0) {
