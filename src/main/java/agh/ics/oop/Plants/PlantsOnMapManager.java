@@ -84,4 +84,9 @@ public abstract class PlantsOnMapManager
     {
         return plantGrowthRate;
     }
+
+    public Set<Vector2D> getAllPositionsCopy()
+    {
+        return new HashSet<>(allPositions);
+    }
 }

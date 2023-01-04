@@ -1,7 +1,6 @@
 package agh.ics.oop.Utilities.Gui;
 
 import agh.ics.oop.Animals.Animal;
-import agh.ics.oop.IMapElement;
 import agh.ics.oop.Plants.Plant;
 import agh.ics.oop.Utilities.Configuration;
 import agh.ics.oop.Utilities.Vector2D;
@@ -12,8 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import org.w3c.dom.css.Rect;
 
 import java.util.Set;
 

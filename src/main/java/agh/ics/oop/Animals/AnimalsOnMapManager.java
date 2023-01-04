@@ -134,7 +134,15 @@ public class AnimalsOnMapManager {
 
             for (Animal animal : animalSet)
             {
+                animal.die();
                 animalsOnMap.get(vector2D).remove(animal);
+
+                if (!deadAnimalsOnMap.containsKey(vector2D))
+                {
+                    deadAnimalsOnMap.put(vector2D, new HashSet<>());
+                }
+
+                deadAnimalsOnMap.get(vector2D).add(animal);
             }
 
             if (animalsOnMap.get(vector2D).size() == 0)

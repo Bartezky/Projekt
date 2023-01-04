@@ -11,6 +11,7 @@ public class Animal {
     private final Genotype genotype;
     private final WorldMap worldMap;
     private final int birthDate;
+    private int deathDate;
     private Position position;
     private int energy;
     private int childrenCount;
@@ -22,6 +23,7 @@ public class Animal {
         birthDate = date;
         childrenCount = 0;
         this.worldMap = worldMap;
+        deathDate = -1;
     }
 
     public void reproduce(Animal animal, Mutation mutation) {
@@ -59,6 +61,7 @@ public class Animal {
 
         Animal newborn = new Animal(new Position(position.getVector2D(), new Orientation()), 2 * worldMap.getConfiguration().getAnimalEnergyUsedToReproduce(), newGenotype, worldMap.getCurrentDay(), worldMap);
         worldMap.getAnimalsOnMapManager().placeAnimal(position, newborn);
+
     }
 
     public void move() {
@@ -93,5 +96,18 @@ public class Animal {
 
     public int getChildrenCount() {
         return childrenCount;
+    }
+
+    public Genotype getGenotype() {
+        return genotype;
+    }
+
+    public void die()
+    {
+        deathDate = worldMap.getCurrentDay();
+    }
+
+    public int getDeathDate() {
+        return deathDate;
     }
 }

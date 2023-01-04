@@ -8,17 +8,23 @@ import agh.ics.oop.Plants.PlantsOnMapManager;
 import agh.ics.oop.Plants.ToxicBodies;
 import agh.ics.oop.Plants.WoodedEquator;
 import agh.ics.oop.Utilities.Configuration;
+import agh.ics.oop.Utilities.Statistics;
 
 public class WorldMap {
+    private static int nextId = 0;
+    private final int id;
     private final int width;
     private final int height;
     private final AnimalsOnMapManager animalsOnMapManager;
     private final MapBordersManager mapBordersManager;
     private final PlantsOnMapManager plantsOnMapManager;
     private final Configuration configuration;
+    private final Statistics statistics;
     private int currentDay;
 
     public WorldMap(Configuration configuration) {
+        this.id = nextId;
+        ++nextId;
         this.configuration = configuration;
         width = configuration.getMapWidth();
         height = configuration.getMapHeight();
@@ -36,6 +42,12 @@ public class WorldMap {
             case 1 -> plantsOnMapManager = new ToxicBodies(this, configuration);
             default -> throw new IllegalArgumentException("Illegal plant growth variant");
         }
+
+        statistics = new Statistics(this);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getWidth() {
@@ -67,14 +79,20 @@ public class WorldMap {
     }
 
     public void nextDay() {
+        ++currentDay;
         animalsOnMapManager.deleteDeadAnimalsFromMap();
         animalsOnMapManager.moveAnimals();
         animalsOnMapManager.eatPlants();
         animalsOnMapManager.reproduceAnimals();
         plantsOnMapManager.addNewPlants(plantsOnMapManager.getPlantGrowthRate());
+        statistics.updateStatistics();
     }
 
     public boolean isDead() {
         return animalsOnMapManager.isEmpty() && plantsOnMapManager.isFull();
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
     }
 }

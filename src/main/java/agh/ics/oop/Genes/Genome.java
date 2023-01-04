@@ -1,5 +1,7 @@
 package agh.ics.oop.Genes;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 public class Genome {
@@ -60,5 +62,25 @@ public class Genome {
         int[] copy = new int[numberOfGenes];
         System.arraycopy(genes, 0, copy, 0, numberOfGenes);
         return copy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Genome genome = (Genome) o;
+        return numberOfGenes == genome.numberOfGenes && Arrays.equals(genes, genome.genes);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(numberOfGenes);
+        result = 31 * result + Arrays.hashCode(genes);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(genes);
     }
 }

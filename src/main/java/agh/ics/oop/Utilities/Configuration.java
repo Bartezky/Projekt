@@ -23,6 +23,7 @@ public class Configuration
     private int refreshRate;
     private int windowWidth;
     private int windowHeight;
+    private int saveStatistics;
     private final String configFilePath;
 
 
@@ -101,6 +102,7 @@ public class Configuration
                         case "refreshRate" -> refreshRate = value;
                         case "windowWidth" -> windowWidth = value;
                         case "windowHeight" -> windowHeight = value;
+                        case "saveStatistics" -> saveStatistics = value;
                         default -> throw new IllegalArgumentException("Cannot resolve variable: " + key);
                     }
                 }
@@ -186,6 +188,10 @@ public class Configuration
 
     public int getWindowHeight() {
         return windowHeight;
+    }
+
+    public int getSaveStatistics() {
+        return saveStatistics;
     }
 
     public String getConfigFilePath() {
