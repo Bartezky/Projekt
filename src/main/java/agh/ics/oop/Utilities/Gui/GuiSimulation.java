@@ -5,17 +5,17 @@ import agh.ics.oop.Utilities.Simulation;
 
 public class GuiSimulation extends Simulation
 {
-    private Window window;
-    public GuiSimulation(Configuration configuration, Window window)
+    private SimulationStages simulationStages;
+    public GuiSimulation(Configuration configuration, SimulationStages simulationStages)
     {
         super(configuration);
-        this.window = window;
+        this.simulationStages = simulationStages;
     }
 
     @Override
     protected void performNextDay()
     {
         super.performNextDay();
-        window.notifyWindow();
+        simulationStages.notifyStages();
     }
 }

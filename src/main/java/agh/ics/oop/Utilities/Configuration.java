@@ -26,11 +26,6 @@ public class Configuration
     private int saveStatistics;
     private final String configFilePath;
 
-
-    public Configuration()
-    {
-        this("src/main/java/agh/ics/oop/default-configuration.cfg");
-    }
     public Configuration(String configFilePath)
     {
         this.configFilePath = configFilePath;
