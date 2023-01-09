@@ -1,11 +1,8 @@
 package agh.ics.oop.Animals;
 
-import agh.ics.oop.Genes.*;
-import agh.ics.oop.Utilities.Orientation;
+import agh.ics.oop.Genes.Genotype;
 import agh.ics.oop.Utilities.Position;
 import agh.ics.oop.WorldMap;
-
-import java.util.Random;
 
 public class Animal {
     private final Genotype genotype;
@@ -24,44 +21,6 @@ public class Animal {
         childrenCount = 0;
         this.worldMap = worldMap;
         deathDate = -1;
-    }
-
-    public void reproduce(Animal animal, Mutation mutation) {
-        if (this.isDead() || animal.isDead())
-        {
-            return;
-        }
-
-        int numberOfGenesFromStronger = worldMap.getConfiguration().getAnimalGenomeLength() * this.energy / (this.energy + animal.energy);
-        int numberOfGenesFromWeaker = worldMap.getConfiguration().getAnimalGenomeLength() - numberOfGenesFromStronger;
-
-        Random random = new Random();
-        Genome genome;
-        if (random.nextBoolean()) {
-            genome = new Genome(this.genotype.getGenome().getLeftSlice(numberOfGenesFromStronger), animal.genotype.getGenome().getRightSlice(numberOfGenesFromWeaker));
-        } else {
-            genome = new Genome(this.genotype.getGenome().getLeftSlice(numberOfGenesFromWeaker), animal.genotype.getGenome().getRightSlice(numberOfGenesFromStronger));
-        }
-
-        int genePointerType = worldMap.getConfiguration().getAnimalBehaviorVariant();
-        GenePointer genePointer;
-        if (genePointerType == 0) {
-            genePointer = new BitMadness(worldMap.getConfiguration().getAnimalGenomeLength());
-        } else {
-            genePointer = new FullPredistination(worldMap.getConfiguration().getAnimalGenomeLength());
-        }
-
-        Genotype newGenotype = new Genotype(genePointer, mutation.mutate(genome));
-
-        this.changeEnergy(-worldMap.getConfiguration().getAnimalEnergyUsedToReproduce());
-        animal.changeEnergy(-worldMap.getConfiguration().getAnimalEnergyUsedToReproduce());
-
-        this.childrenCount += 1;
-        animal.childrenCount += 1;
-
-        Animal newborn = new Animal(new Position(position.getVector2D(), new Orientation()), 2 * worldMap.getConfiguration().getAnimalEnergyUsedToReproduce(), newGenotype, worldMap.getCurrentDay(), worldMap);
-        worldMap.getAnimalsOnMapManager().placeAnimal(position, newborn);
-
     }
 
     public void move() {
@@ -102,12 +61,16 @@ public class Animal {
         return genotype;
     }
 
-    public void die()
-    {
+    public void die() {
         deathDate = worldMap.getCurrentDay();
     }
 
     public int getDeathDate() {
         return deathDate;
+    }
+
+    public void hasNewChild() {
+        changeEnergy(-worldMap.getConfiguration().getAnimalEnergyUsedToReproduce());
+        childrenCount++;
     }
 }

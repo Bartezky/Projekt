@@ -20,6 +20,7 @@ public class AnimalsOnMapManager {
     private final int genotypeLength;
     private final Comparator<Animal> comparator;
     private final int genePointerType;
+    private final Reproduction reproduction;
 
     public AnimalsOnMapManager(WorldMap map, Configuration configuration) {
         this.map = map;
@@ -46,6 +47,8 @@ public class AnimalsOnMapManager {
         }
 
         addInitialAnimals();
+
+        reproduction = new Reproduction(configuration, map, mutation);
     }
 
     public void placeAnimal(Position position, Animal animal) {
@@ -118,8 +121,7 @@ public class AnimalsOnMapManager {
 
             for (Animal animal : animalSet) {
                 if (animal.isDead()) {
-                    if (!animalsToDelete.containsKey(vector2D))
-                    {
+                    if (!animalsToDelete.containsKey(vector2D)) {
                         animalsToDelete.put(vector2D, new HashSet<>());
                     }
 
@@ -132,21 +134,18 @@ public class AnimalsOnMapManager {
             Vector2D vector2D = entry.getKey();
             Set<Animal> animalSet = entry.getValue();
 
-            for (Animal animal : animalSet)
-            {
+            for (Animal animal : animalSet) {
                 animal.die();
                 animalsOnMap.get(vector2D).remove(animal);
 
-                if (!deadAnimalsOnMap.containsKey(vector2D))
-                {
+                if (!deadAnimalsOnMap.containsKey(vector2D)) {
                     deadAnimalsOnMap.put(vector2D, new HashSet<>());
                 }
 
                 deadAnimalsOnMap.get(vector2D).add(animal);
             }
 
-            if (animalsOnMap.get(vector2D).size() == 0)
-            {
+            if (animalsOnMap.get(vector2D).size() == 0) {
                 animalsOnMap.remove(vector2D);
             }
         }
@@ -191,8 +190,7 @@ public class AnimalsOnMapManager {
             allAnimals.addAll(entry.getValue());
         }
 
-        for (Animal animal : allAnimals)
-        {
+        for (Animal animal : allAnimals) {
             animal.move();
         }
 
@@ -204,7 +202,7 @@ public class AnimalsOnMapManager {
 
             if (animalSet.size() >= 2) {
                 Animal[] animals = sortAnimals(animalSet);
-                animals[animals.length - 1].reproduce(animals[animals.length - 2], mutation);
+                reproduction.reproduce(animals[animals.length - 1], animals[animals.length - 2]);
             }
         }
     }

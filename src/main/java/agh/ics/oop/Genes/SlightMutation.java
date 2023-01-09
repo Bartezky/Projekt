@@ -13,6 +13,6 @@ public class SlightMutation extends Mutation {
         if (random.nextBoolean()) {
             return (gene + 1) % 8;
         }
-        return (gene - 1) % 8;
+        return (gene + 7) % 8;
     }
 }
